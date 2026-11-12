@@ -1,8 +1,13 @@
 <!--no-pdf-->
-# CMSC 124 Problem Set 3 Starter
+# CMSC 124 Problem Set 3: LISPing Your Functions
 
 This repository holds the CLISP prediction corpus and the toy evaluator for
 Problem Set 3. The assignment manual defines the work and the submission rules.
+
+## Team Members
+
+- **Ryona Cassandra Honrado** ([@rcssndr](https://github.com/rcssndr))
+- **Ma. Christie Jude L. Tarre** ([@cjtarre](https://github.com/cjtarre))
 
 ## Layout
 
