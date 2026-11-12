@@ -38,7 +38,7 @@ name. Signal an error when NAME is not bound at all."
 
 MAPCAR and a LAMBDA do this in one line. Watch the arity: EVAL-EXPR takes two
 arguments and MAPCAR hands its function one."
-  (mapcar (lambda (expr) (eval-expr expr env)) operands))
+  (mapcar (lambda (expr) (eval-expr expr env)) exprs))
 
 (defun apply-op (op values)
   "Apply the arithmetic operator OP to the two numbers in VALUES.
@@ -96,10 +96,13 @@ Order the branches with care. NIL is a symbol as well as the empty list, and a
 number is not a cons, so the atom tests come before the list tests."
   (cond
     ((numberp expr)
-     expr)
+      expr)
 
     ((symbolp expr)
-     (lookup expr env))
+      (lookup expr env))
+
+    ((member (car expr) '(+ - *))
+      (apply-op (car expr) (eval-operands (cdr expr) env)))
 
     (t
-     (error "Unsupported expression: ~A" expr))))
+      (error "Unsupported expression: ~A" expr))))
