@@ -58,14 +58,18 @@ MAPCAR takes two lists and #'CONS pairs them. Build a new list. Do not modify
 ENV, because the caller keeps using it after the extension goes out of scope."
   (append (mapcar #'cons params args) env))
 
-
 (defun eval-let (expr env)
   "Evaluate (let ((name init) ...) body).
 
 Every init is evaluated in ENV before any name is bound, so the bindings happen
 in parallel and an init cannot see a name the same LET introduces."
-  (declare (ignore expr env))
-  (error "eval-let is not implemented"))
+  (let ((bindings (second expr)))
+    (let ((params (mapcar #'first bindings))
+          (args (eval-operands
+                 (mapcar #'second bindings)
+                 env)))
+      (eval-expr (third expr)
+                 (extend-env params args env)))))
 
 ;;; E4 -- lambda and application.
 
@@ -103,6 +107,9 @@ number is not a cons, so the atom tests come before the list tests."
 
     ((member (car expr) '(+ - *))
       (apply-op (car expr) (eval-operands (cdr expr) env)))
+
+    ((eq (car expr) 'let)
+      (eval-let expr env))
 
     (t
       (error "Unsupported expression: ~A" expr))))
